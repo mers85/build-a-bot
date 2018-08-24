@@ -15,6 +15,5 @@ export default new Vuex.Store({
     users: usersModule,
   },
   getters: {
-    
   },
 });
