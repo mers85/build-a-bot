@@ -48,76 +48,72 @@
         position="bottom"
         @partSelected="part => selectedRobot.base=part"/>
     </div>
-    <div>
-      <h1>Cart</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Robot</th>
-            <th class="cost">Cost</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(robot, index) in cart" :key="index">
-            <td>{{robot.head.title}}</td>
-            <td class="cost">{{robot.cost}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 </template>
 
 <script>
-  import availableParts from '../data/parts';
-  import createdHookMixin from './created-hook-mixin';
-  import PartSelector from './PartSelector.vue';
-  import CollapsibleSection from '../shared/CollapsibleSection.vue';
+import availableParts from '../data/parts';
+import createdHookMixin from './created-hook-mixin';
+import PartSelector from './PartSelector.vue';
+import CollapsibleSection from '../shared/CollapsibleSection.vue';
 
-  export default {
-    name: 'RobotBuilder',
-    components: {
-      PartSelector,
-      CollapsibleSection,
+
+export default {
+  name: 'RobotBuilder',
+  beforeRouteLeave(to, from, next) {
+    if (this.addedToCart) {
+      next(true);
+    } else {
+      /* eslint no-alert: 0 */
+      /* eslint no-restricted-globals: 0 */
+      const response = confirm('You have not added your robot to your cart, are you sure you want to leave?');
+      next(response);
+    }
+  },
+  components: {
+    PartSelector,
+    CollapsibleSection,
+  },
+  data() {
+    return {
+      availableParts,
+      addedToCart: false,
+      cart: [],
+      selectedRobot: {
+        head: {},
+        leftArm: {},
+        torso: {},
+        rightArm: {},
+        base: {},
+      },
+    };
+  },
+  mixins: [createdHookMixin],
+  computed: {
+    saleBorderClass() {
+      return this.selectedRobot.head.onSale ? 'sale-border' : '';
     },
-    data() {
+    headBorderStyle() {
       return {
-        availableParts,
-        cart: [],
-        selectedRobot: {
-           head: {},
-           leftArm: {},
-           torso: {},
-           rightArm: {},
-           base: {},
-        },
+        border: this.selectedRobot.head.onSale ?
+          '3px solid red' :
+          '3px solid #aaa',
       };
     },
-    mixins: [createdHookMixin],
-    computed: {
-      saleBorderClass() {
-        return this.selectedRobot.head.onSale ? 'sale-border' : '';
-      },
-      headBorderStyle(){
-        return {
-          border: this.selectedRobot.head.onSale ?
-           '3px solid red':
-           '3px solid #aaa',
-        };
-      },
-    },
-    methods: {
-      addToCart() {
-        const robot = this.selectedRobot;
-        const cost = robot.head.cost +
+  },
+  methods: {
+    addToCart() {
+      const robot = this.selectedRobot;
+      const cost = robot.head.cost +
           robot.leftArm.cost +
           robot.torso.cost +
           robot.rightArm.cost +
           robot.base.cost;
-        this.cart.push(Object.assign({}, robot, {cost}))
-      },
+      this.$store.commit('addRobotToCart', Object.assign({}, robot, { cost }));
+      this.addedToCart = true;
     },
-  };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -233,14 +229,6 @@
     width: 210px;
     padding: 3px;
     font-size: 16px;
-  }
-  td, th {
-    text-align: left;
-    padding: 5px;
-    padding-right: 20px;
-  }
-  .cost {
-    text-align: right;
   }
   .sale-border {
     border: 3px solid red;

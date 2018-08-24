@@ -12,8 +12,8 @@
 <script>
 export default {
   name: 'CollapsibleSection',
-  data(){
-    return { open: true};
+  data() {
+    return { open: true };
   },
 };
 </script>
