@@ -10,7 +10,12 @@
     </router-link>
     <button @click="selectPreviousPart()" class="prev-selector"></button>
     <button @click="selectNextPart()" class="next-selector"></button>
-    <span class="sale" v-show="selectedPart.onSale">Sale!</span>
+    <span
+    @click="pinPadding='30px'"
+    v-pin="{ bottom: pinPadding, right: pinPadding }" class="sale"
+    v-show= "selectedPart.onSale">
+      Sale!
+    </span>
   </div>
 </template>
 
@@ -40,7 +45,10 @@ export default {
     },
   },
   data() {
-    return { selectedPartIndex: 0 };
+    return {
+      selectedPartIndex: 0,
+      pinPadding: '10px',
+    };
   },
   computed: {
     selectedPart() {
@@ -82,9 +90,6 @@ export default {
   border: 3px solid #aaa;
 }
 .sale {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
   color: white;
   background-color: red;
   padding: 3px;
@@ -123,9 +128,9 @@ export default {
 }
 .prev-selector {
   position: absolute;
-  z-index:2;
+  z-index:1;
   top: -3px;
-  left: -47px;
+  left: -53px;
   width: 25px;
   height: 171px;
 }
@@ -133,7 +138,7 @@ export default {
   position: absolute;
   z-index:1;
   top: -3px;
-  right: -47px;
+  right: -53px;
   width: 25px;
   height: 171px;
 }
@@ -153,6 +158,7 @@ export default {
   opacity:0.8;
 }
 .left .prev-selector {
+  z-index: 0;
   top: -28px;
   left: -3px;
   width: 144px;
@@ -166,6 +172,7 @@ export default {
   height: 25px;
 }
 .right .prev-selector {
+  z-index: 0;
   top: -28px;
   left: 24px;
   width: 144px;

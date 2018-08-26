@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    Root Foo: {{rootFoo}}<br/>
+    <!-- Root Foo: {{rootFoo}}<br/>
     Robots Foo: {{robotsFoo}}<br/>
     Users Foo: {{usersFoo}}<br/>
     <br/>
     Root Getter: {{rootGetterFoo}}<br/>
-    Robots Getter: {{robotsGetterFoo}}<br/>
+    Robots Getter: {{robotsGetterFoo}}<br/> -->
 
   <header>
     <nav>
@@ -54,8 +54,8 @@ export default {
       usersFoo: state => state.users.foo,
     }),
     ...mapState('robots', { robotsFoo: 'foo' }),
-    ...mapGetters({rootGetterFoo: 'foo'}),
-    ...mapGetters('robots', {robotsGetterFoo: 'foo'}),
+    ...mapGetters({ rootGetterFoo: 'foo' }),
+    ...mapGetters('robots', { robotsGetterFoo: 'foo' }),
     cart() {
       return this.$store.state.robots.cart;
     },
