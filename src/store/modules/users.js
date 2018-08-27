@@ -3,7 +3,7 @@ import axios from 'axios';
 export default {
   state: {
     user: null,
-    foo: 'users-foo'
+    foo: 'users-foo',
   },
   mutations: {
     updateCurrentUser(state, user) {
@@ -18,11 +18,9 @@ export default {
   actions: {
     signIn({ commit }) {
       axios.post('/api/sign-in')
-        .then(result => commit('updateCurrentUser', result.data))
-        .catch(console.error);
+        .then(result => commit('updateCurrentUser', result.data));
     },
     addRobotToCart() {
-      console.log('Users addRobotToCart called');
     },
   },
 };
